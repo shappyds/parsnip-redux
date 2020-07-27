@@ -3,12 +3,12 @@ import { TASK_STATUSES } from '../constants'
 
 const Task = props => {
   function onStatusChange(e) {
-    props.onStatusChange({id: props.task.id, param: { status: e.target.value }})
+    props.onStatusChange(props.task.id, { desc: props.task.description, title: props.title, status: e.target.value })
   }
 
 
   return (
-    <div className="task">
+    <div className="task"> 
       <div className="task-header">
         <div>{props.task.title}</div>
         <select value={props.task.status} onChange={onStatusChange}>

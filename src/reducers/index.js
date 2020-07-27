@@ -1,32 +1,18 @@
-import { uniqueId } from '../actions'
 
-const mockData = [
-  {
-    id: uniqueId(),
-    title: 'Learn Redux',
-    description: 'Store, action',
-    status: 'Completed'
-  },
-  {
-    id: uniqueId(),
-    title: 'Peace',
-    description: 'No big deal',
-    status: 'In Progress'
-  }
-]
-
-export default function tasks(state = { tasks: mockData }, action) {
+export default function tasks(state = { tasks: [] }, action) {
   switch (action.type) {
-    case 'CREATE_TASK':
+    case 'FETCH_TASKS_SUCCEEDED':
+      return action.payload
+    case 'CREATE_TASK_SUCCESS':
       return {tasks: state.tasks.concat(
-        action.payload
+        action.payload.task
       )}
-    case 'EDIT_TASK':
+    case 'EDIT_TASK_SUCCESS':
       const { payload } = action
       return {
         tasks: state.tasks.map(task => {
-          if (task.id === payload.id) {
-            return {...task, status: payload.param.status}
+          if (task.id === payload.task.id) {
+            return payload.task
           }
           return task
         })
