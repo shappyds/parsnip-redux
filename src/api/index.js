@@ -18,5 +18,5 @@ export function createTask(param) {
 }
 
 export function editTask(id, param) {
-  return client.put(`tasks/${id}`, param)
+  return client.put(`/tasks/${id}`, param)
 }

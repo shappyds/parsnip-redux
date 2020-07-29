@@ -49,6 +49,12 @@ export function editTask(id, { title, desc, status }) {
   }
 }
 
+export function fetchTasksStart() {
+  return {
+    type: 'FETCH_TASKS_START'
+  }
+}
+
 export function fetchTasksSucceeded(tasks) {
   return {
     type: 'FETCH_TASKS_SUCCEEDED',
@@ -58,12 +64,25 @@ export function fetchTasksSucceeded(tasks) {
   }
 }
 
+export function fetchTasksFailed(error) {
+  return {
+    type: 'FETCH_TASKS_FAILED',
+    payload: {
+      error
+    }
+  }
+}
+
 
 export function fetchTasks() {
   return dispatch => {
+    dispatch(fetchTasksStart())
     api.fetchTasks()
       .then(res => {
-        dispatch(fetchTasksSucceeded(res.data))
+        setTimeout(() => dispatch(fetchTasksSucceeded(res.data)), 3000)
+      })
+      .catch(error => {
+        dispatch(fetchTasksFailed(error.message))
       })
   }
 }
