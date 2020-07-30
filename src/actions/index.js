@@ -1,11 +1,7 @@
 
 import { TASK_STATUSES } from '../constants'
 import * as api from '../api'
-let _id = 1
-
-export function uniqueId() {
-  return _id++
-}
+import { CALL_API } from '../middleware/api'
 
 export function createTaskSuccess(task) {
   return {
@@ -49,40 +45,11 @@ export function editTask(id, { title, desc, status }) {
   }
 }
 
-export function fetchTasksStart() {
-  return {
-    type: 'FETCH_TASKS_START'
-  }
-}
-
-export function fetchTasksSucceeded(tasks) {
-  return {
-    type: 'FETCH_TASKS_SUCCEEDED',
-    payload: {
-      tasks
-    }
-  }
-}
-
-export function fetchTasksFailed(error) {
-  return {
-    type: 'FETCH_TASKS_FAILED',
-    payload: {
-      error
-    }
-  }
-}
-
-
 export function fetchTasks() {
-  return dispatch => {
-    dispatch(fetchTasksStart())
-    api.fetchTasks()
-      .then(res => {
-        setTimeout(() => dispatch(fetchTasksSucceeded(res.data)), 3000)
-      })
-      .catch(error => {
-        dispatch(fetchTasksFailed(error.message))
-      })
+  return {
+    [CALL_API]: {
+      endpoint: '/tasks',
+      types: ['FETCH_TASKS_START', 'FETCH_TASKS_SUCCEEDED', 'FETCH_TASKS_FAILED']
+    }
   }
 }
