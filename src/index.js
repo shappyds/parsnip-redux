@@ -5,17 +5,23 @@ import App from './App';
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { logger } from 'redux-logger'
 import api from './middleware/api'
 import tasks from './reducers'
-import * as serviceWorker from './serviceWorker';
+import rootSaga from './sagas'
+import * as serviceWorker from './serviceWorker'
+
+const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
   tasks
 })
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(api, thunk, logger)))
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(api, thunk, sagaMiddleware, logger)))
+
+sagaMiddleware.run(rootSaga)
 
 ReactDOM.render(
   <Provider store={store}>

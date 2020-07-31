@@ -120,3 +120,9 @@ hr {
   border-color: #ebcccc;
   color: #a94442;
 }
+
+.task-timer {
+  text-align: right;
+  font-weight: bold;
+  margin-right: 5px;
+}

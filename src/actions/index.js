@@ -1,7 +1,6 @@
 
 import { TASK_STATUSES } from '../constants'
 import * as api from '../api'
-import { CALL_API } from '../middleware/api'
 
 export function createTaskSuccess(task) {
   return {
@@ -33,23 +32,48 @@ export function editTaskSuccess(task) {
   }
 }
 
+function progressTimerStart(taskId) {
+  return {
+    type: 'TIMER_START',
+    payload: {
+      taskId
+    }
+  }
+}
+
+function progressTimerStop(taskId) {
+  return {
+    type: 'TIMER_STOP',
+    payload: {
+      taskId
+    }
+  }
+}
+
+
 export function editTask(id, { title, desc, status }) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const task = getState().tasks.tasks.find(task => task.id === id)
     api.editTask(id, {
+      ...task,
       title,
       description: desc,
       status
     }).then(res => {
       dispatch(editTaskSuccess(res.data))
+      if(res.data.status === TASK_STATUSES[1]) {
+        return dispatch(progressTimerStart(res.data.id))
+      }
+
+      if(task.status === TASK_STATUSES[1]) {
+        return dispatch(progressTimerStop(id))
+      }
     })
   }
 }
 
 export function fetchTasks() {
   return {
-    [CALL_API]: {
-      endpoint: '/tasks',
-      types: ['FETCH_TASKS_START', 'FETCH_TASKS_SUCCEEDED', 'FETCH_TASKS_FAILED']
-    }
+    type: 'FETCH_TASKS_START'
   }
 }

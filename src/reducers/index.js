@@ -20,7 +20,7 @@ export default function tasks(state = initialState, action) {
     case 'FETCH_TASKS_SUCCEEDED':
       return {
         ...state,
-        tasks: action.payload,
+        tasks: action.payload.tasks,
         error: null,
         isLoading: false
       }
@@ -40,6 +40,21 @@ export default function tasks(state = initialState, action) {
           }
           return task
         })
+      }
+    case 'TIMER_INCREMENT':
+      const nextTasks = state.tasks.map(task => {
+        if(task.id === action.payload.taskId) {
+          return {
+            ...task,
+            timer: task.timer + 1
+          }
+        }
+        return task
+      })
+
+      return {
+        ...state,
+        tasks: nextTasks
       }
     default:
       return state
