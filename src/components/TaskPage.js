@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import TaskList from './TaskList';
+import React, { Component } from 'react'
+import TaskList from './TaskList'
 
-import { TASK_STATUSES } from '../constants';
+import { TASK_STATUSES } from '../constants'
 
 class TaskPage extends Component {
   constructor(props) {
@@ -34,13 +34,17 @@ class TaskPage extends Component {
     this.props.onCreateTask({
       title: this.state.title,
       desc: this.state.description,
-    });
-    this.resetForm();
-  };
+    })
+    this.resetForm()
+  }
+
+  onSearch = e => {
+    this.props.filterTasks(e.target.value)
+  }
 
   toggleForm = () => {
-    this.setState({ showNewCardForm: !this.state.showNewCardForm });
-  };
+    this.setState({ showNewCardForm: !this.state.showNewCardForm })
+  }
 
   renderTaskLists() {
     const { onEditTask, tasks } = this.props;
@@ -59,16 +63,21 @@ class TaskPage extends Component {
   }
 
   render() {
-    if(this.props.isLoading) {
+    if (this.props.isLoading) {
       return (
         <div className="tasks-loading">
-          Loading...
+          Loading now...
         </div>
       )
     }
     return (
       <div className="tasks">
         <div className="tasks-header">
+          <input 
+            onChange={this.onSearch}
+            type="text"
+            placeholder="Search..."
+          />
           <button className="button button-default" onClick={this.toggleForm}>
             + New task
           </button>

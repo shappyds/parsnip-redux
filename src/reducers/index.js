@@ -1,7 +1,8 @@
 const initialState = {
   isLoading: false,
   tasks: [],
-  error: null
+  error: null,
+  getSearchTerm: ''
 }
 
 export default function tasks(state = initialState, action) {
@@ -55,6 +56,11 @@ export default function tasks(state = initialState, action) {
       return {
         ...state,
         tasks: nextTasks
+      }
+    case 'FILTER_TASKS':
+      return {
+        ...state,
+        searchTerm: action.payload.keyword
       }
     default:
       return state

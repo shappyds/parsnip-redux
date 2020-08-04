@@ -77,3 +77,13 @@ export function fetchTasks() {
     type: 'FETCH_TASKS_START'
   }
 }
+
+
+export function filterTasks(keyword) {
+  return {
+    type: 'FILTER_TASKS',
+    payload: {
+      keyword
+    }
+  }
+}

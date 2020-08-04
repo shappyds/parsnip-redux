@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import TaskPage from './components/TaskPage'
 import FlashMessage from './components/FlashMessage'
-import { createTask, editTask, fetchTasks } from './actions'
+import { createTask, editTask, fetchTasks, filterTasks } from './actions'
 import './App.css'
+import { getFilteredTasks } from './selectors'
 
 class App extends React.Component {
 
@@ -14,7 +15,7 @@ class App extends React.Component {
   
   
   render() {
-    const { tasks, createTask, editTask, isLoading } = this.props
+    const { tasks, createTask, editTask, isLoading, filterTasks } = this.props
 
     return (
       <div className="container">
@@ -22,7 +23,11 @@ class App extends React.Component {
           this.props.error && <FlashMessage message={this.props.error}/>
         }
         <div className="main-content">
-          <TaskPage tasks={tasks} onCreateTask={createTask} onEditTask={editTask} isLoading={isLoading} />
+          <TaskPage tasks={tasks} 
+            onCreateTask={createTask} 
+            onEditTask={editTask} 
+            isLoading={isLoading} 
+            filterTasks={filterTasks}/>
         </div>
       </div>
     );
@@ -31,7 +36,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    tasks: state.tasks.tasks,
+    tasks: getFilteredTasks(state),
     isLoading: state.tasks.isLoading,
     error: state.tasks.error
   }
@@ -40,7 +45,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   createTask: bindActionCreators(createTask, dispatch),
   editTask: bindActionCreators(editTask, dispatch),
-  fetchTasks: bindActionCreators(fetchTasks, dispatch)
+  fetchTasks: bindActionCreators(fetchTasks, dispatch),
+  filterTasks: bindActionCreators(filterTasks, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
